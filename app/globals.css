@@ -29,10 +29,6 @@ header.top{
   padding: 28px 20px 0;
   max-width: 720px;
   margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 12px;
 }
 header.top .app-name{
   font-family: var(--font-oswald), sans-serif;
@@ -207,7 +203,6 @@ button.primary{
   cursor: pointer;
 }
 button.primary:hover{ filter: brightness(1.08); }
-button.primary:disabled{ opacity: 0.6; cursor: default; }
 button.ghost{
   background: none;
   border: 1px solid var(--border);
@@ -218,16 +213,6 @@ button.ghost{
   border-radius: 8px;
   cursor: pointer;
 }
-button.link{
-  background: none;
-  border: none;
-  color: var(--text-faint);
-  font-family: var(--font-inter), sans-serif;
-  font-size: 13px;
-  padding: 6px 0;
-  cursor: pointer;
-}
-button.link:hover{ color: var(--text); }
 .save-status{
   font-size: 12.5px;
   color: var(--text-faint);
@@ -381,37 +366,6 @@ table.log-table td.strong{ color: var(--text); font-weight: 500; }
   padding: 20px 0;
   text-align: center;
 }
-
-/* Sign in */
-.auth{
-  max-width: 360px;
-  margin: 14vh auto 0;
-  padding: 0 20px;
-}
-.auth h1{
-  font-family: var(--font-oswald), sans-serif;
-  font-size: 26px;
-  font-weight: 600;
-  letter-spacing: 0.01em;
-}
-.auth p{
-  color: var(--text-dim);
-  font-size: 14px;
-  margin: 4px 0 22px;
-}
-.auth form{ display:flex; flex-direction: column; gap: 10px; }
-.auth input{
-  background: var(--surface-2);
-  border: 1px solid var(--border);
-  color: var(--text);
-  border-radius: 8px;
-  padding: 11px 12px;
-  font-family: inherit;
-  font-size: 16px;
-}
-.auth input:focus{ outline: 1.5px solid var(--accent); outline-offset: 0; }
-.auth input::placeholder{ color: var(--text-faint); }
-.auth-error{ color: var(--warn); font-size: 13px; min-height: 18px; }
 
 @media (max-width: 480px){
   .macro-hero{ grid-template-columns: repeat(2,1fr); }
