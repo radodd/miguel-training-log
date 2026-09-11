@@ -11,6 +11,13 @@
   --good: #7a9b76;
   --good-soft: rgba(122,155,118,0.14);
   --warn: #b85c4a;
+
+  /* sizing that grows on phones (see the max-width: 600px block) */
+  --gutter: 20px;
+  --tap: 32px;
+  --input-font: 13.5px;
+
+  color-scheme: dark;
 }
 *{box-sizing:border-box; margin:0; padding:0;}
 html,body{height:100%;}
@@ -20,13 +27,16 @@ body{
   font-family: var(--font-inter), system-ui, sans-serif;
   font-feature-settings: "tnum" 1;
   -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  overflow-anchor: none; /* panels fill in after loading; don't let the browser shift the scroll position */
   min-height:100vh;
   padding-bottom: 40px;
 }
+button, input, textarea, summary, label{ touch-action: manipulation; }
 .headline{font-family: var(--font-oswald), sans-serif; font-weight:600; letter-spacing:0.01em;}
 
 header.top{
-  padding: 28px 20px 0;
+  padding: 28px var(--gutter) 0;
   max-width: 720px;
   margin: 0 auto;
 }
@@ -43,9 +53,13 @@ header.top .app-sub{
 }
 
 nav.tabs{
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--bg);
   max-width: 720px;
   margin: 22px auto 0;
-  padding: 0 20px;
+  padding: 0 var(--gutter);
   display: flex;
   gap: 4px;
   overflow-x: auto;
@@ -75,7 +89,7 @@ nav.tabs button.active{
 main{
   max-width: 720px;
   margin: 0 auto;
-  padding: 24px 20px 0;
+  padding: 24px var(--gutter) 0;
 }
 
 .panel{ display:none; }
@@ -107,8 +121,9 @@ main{
   color: var(--text);
   border-radius: 6px;
   padding: 6px 8px;
+  min-height: var(--tap);
   font-family: inherit;
-  font-size: 13px;
+  font-size: var(--input-font);
 }
 
 .exercise{
@@ -136,7 +151,7 @@ main{
 }
 .set-row{
   display:grid;
-  grid-template-columns: 28px 1fr 1fr 32px;
+  grid-template-columns: 28px 1fr 1fr var(--tap);
   gap: 8px;
   align-items: center;
 }
@@ -151,14 +166,16 @@ main{
   color: var(--text);
   border-radius: 6px;
   padding: 7px 8px;
-  font-size: 13.5px;
+  min-height: var(--tap);
+  font-size: var(--input-font);
   font-family: inherit;
   width: 100%;
+  min-width: 0;
 }
 .set-row input:focus{ outline: 1.5px solid var(--accent); outline-offset: 0; }
 .set-row input::placeholder{ color: var(--text-faint); }
 .check-btn{
-  width: 28px; height: 28px;
+  width: var(--tap); height: var(--tap);
   border-radius: 6px;
   border: 1px solid var(--border);
   background: var(--surface-2);
@@ -175,20 +192,22 @@ main{
 
 .col-labels{
   display:grid;
-  grid-template-columns: 28px 1fr 1fr 32px;
+  grid-template-columns: 28px 1fr 1fr var(--tap);
   gap: 8px;
   font-size: 11px;
   color: var(--text-faint);
   padding: 0 0 4px;
 }
+.col-labels div:last-child{ text-align: center; }
 
 .save-bar{
   position: sticky;
   bottom: 0;
-  background: linear-gradient(to top, var(--bg) 60%, transparent);
-  padding: 18px 0 6px;
+  background: linear-gradient(to top, var(--bg) 75%, transparent);
+  padding: 20px 0 8px;
   display:flex;
   justify-content: flex-end;
+  align-items: center;
   gap: 10px;
 }
 button.primary{
@@ -216,7 +235,6 @@ button.ghost{
 .save-status{
   font-size: 12.5px;
   color: var(--text-faint);
-  align-self: center;
   margin-right: auto;
 }
 .save-status.ok{ color: var(--good); }
@@ -246,13 +264,40 @@ button.ghost{
   color: var(--text-dim);
   margin-top: 2px;
 }
-section.block{ margin-bottom: 26px; }
-section.block h3{
+.block{ margin-bottom: 26px; }
+.block h3{
   font-family: var(--font-oswald), sans-serif;
   font-size: 16px;
   font-weight: 600;
   margin-bottom: 10px;
 }
+
+/* Reference sections (cheat sheet, meal templates) collapse to one tappable row */
+details.block{ margin-bottom: 10px; }
+details.block > summary{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 44px;
+  padding: 0 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  list-style: none;
+}
+details.block > summary::-webkit-details-marker{ display:none; }
+details.block > summary h3{ margin: 0; }
+details.block > summary::after{
+  content: "+";
+  color: var(--text-faint);
+  font-size: 20px;
+  line-height: 1;
+}
+details.block[open] > summary{ margin-bottom: 8px; }
+details.block[open] > summary::after{ content: "\2212"; }
+details.block + section.block{ margin-top: 26px; }
+
 .meal-card{
   background: var(--surface);
   border: 1px solid var(--border);
@@ -266,6 +311,7 @@ section.block h3{
 .checklist{ display:flex; flex-direction: column; gap: 8px; }
 .check-item{
   display:flex; align-items:center; gap: 10px;
+  min-height: var(--tap);
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 8px;
@@ -273,18 +319,19 @@ section.block h3{
   font-size: 13.5px;
   cursor: pointer;
 }
-.check-item input{ width: 16px; height:16px; accent-color: var(--accent); }
+.check-item input{ width: 16px; height:16px; accent-color: var(--accent); flex-shrink: 0; }
 
 .nut-notes{
   width: 100%;
-  min-height: 70px;
+  min-height: 90px;
   background: var(--surface);
   border: 1px solid var(--border);
   color: var(--text);
   border-radius: 8px;
   padding: 10px;
   font-family: inherit;
-  font-size: 13.5px;
+  font-size: var(--input-font);
+  resize: vertical;
 }
 
 /* Progress tab */
@@ -320,8 +367,9 @@ section.block h3{
   color: var(--text);
   border-radius: 8px;
   padding: 9px 10px;
+  min-height: var(--tap);
   font-family: inherit;
-  font-size: 13.5px;
+  font-size: var(--input-font);
 }
 .weigh-form input[type="number"]{ width: 100px; }
 
@@ -365,6 +413,33 @@ table.log-table td.strong{ color: var(--text); font-weight: 500; }
   font-size: 13.5px;
   padding: 20px 0;
   text-align: center;
+}
+
+/* Phones: bigger tap targets, 16px inputs, tighter spacing */
+@media (max-width: 600px){
+  :root{
+    --gutter: 16px;
+    --tap: 44px;
+    --input-font: 16px; /* iOS zooms into inputs smaller than 16px */
+  }
+  header.top{ padding-top: 18px; }
+  header.top .app-name{ font-size: 24px; }
+  header.top .app-sub{ font-size: 13px; }
+  nav.tabs{ margin-top: 12px; }
+  nav.tabs button{ padding: 13px 12px 11px; }
+  main{ padding-top: 18px; }
+  .day-head{ margin-bottom: 14px; }
+  .day-head h2{ font-size: 20px; }
+  .exercise{ padding: 14px 12px; }
+  .set-row, .col-labels{ grid-template-columns: 18px 1fr 1fr var(--tap); }
+  .sets{ gap: 8px; }
+  button.primary, button.ghost{ min-height: var(--tap); white-space: nowrap; }
+  .set-row input::placeholder{ font-size: 14px; }
+  .check-item input{ width: 20px; height: 20px; }
+  .weigh-form{ display: grid; grid-template-columns: 1fr 1fr; }
+  .weigh-form input[type="date"], .weigh-form input[type="number"]{ width: 100%; min-width: 0; }
+  .weigh-form button{ grid-column: 1 / -1; }
+  .del-link{ display: inline-block; padding: 8px 4px; }
 }
 
 @media (max-width: 480px){

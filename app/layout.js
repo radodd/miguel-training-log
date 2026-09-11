@@ -6,12 +6,17 @@ const oswald = Oswald({ subsets: ['latin'], variable: '--font-oswald' });
 
 export const metadata = {
   title: 'Training Log',
+  appleWebApp: {
+    title: 'Training Log',
+    statusBarStyle: 'black',
+  },
 };
 
 export const viewport = {
   width: 'device-width',
   initialScale: 1,
   themeColor: '#131417',
+  colorScheme: 'dark',
 };
 
 export default function RootLayout({ children }) {
